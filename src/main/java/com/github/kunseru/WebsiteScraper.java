@@ -11,6 +11,7 @@ import org.jsoup.select.Elements;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class WebsiteScraper {
     private static final int totalPages = 387;
@@ -19,6 +20,25 @@ public class WebsiteScraper {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static void main(String[] args) {
+        if (args.length == 1 && args[0].equals("-calculate")) {
+            Scanner scanner = new Scanner(System.in);
+            Progress progress = loadProgress();
+            if (progress != null) {
+                System.out.println("Calculating..");
+                System.out.printf("Calculated %d kills!", calculateTotalKills(progress.getKillsList()));
+                System.out.println("\nPress Enter to exit...");
+                scanner.nextLine();
+                scanner.close();
+                System.exit(0);
+            } else {
+                System.out.println("There is nothing to calculate!");
+                System.out.println("Press Enter to exit...");
+                scanner.nextLine();
+                scanner.close();
+                System.exit(0);
+            }
+        }
+
         if (args.length != 4 || !args[0].equals("-year") || !args[2].equals("-week")) {
             String jarName = new java.io.File(WebsiteScraper.class.getProtectionDomain()
                     .getCodeSource()
